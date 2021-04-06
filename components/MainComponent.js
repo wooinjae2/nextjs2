@@ -14,15 +14,28 @@ const MainComponent = () => {
       })
   },[])
 
-  function handleClick () {
-    router.push('/edit');
+  function handleClick (id) {
+    if(id){
+      router.push('/edit/[id]', `/edit/${id}`);
+    }else{
+      router.push('/edit/[id]', '/edit/new');
+    }
+  }
+
+  function handleDeleteClick (id) {
+    console.log('deleteClick', id);
+    axios.delete(`/api/v1/employees/${id}`).then((res)=> {
+      console.log(res);
+      setUsers(users.filter((user) => {return user.id !== id}))
+      alert('삭제 완료');
+    })
   }
 
   console.log(users);
   return (
 
     <div>
-      <button onClick={handleClick}>
+      <button onClick={()=>{handleClick()}}>
       추가
     </button>
       <table>
@@ -45,9 +58,10 @@ const MainComponent = () => {
               <td>{user.firstName}</td>
               <td>{user.lastName}</td>
               <td>{user.email}</td>
+              <td><button onClick={(e)=>{handleClick(user.id)}}>수정</button></td>
+              <td><button onClick={(e)=>{handleDeleteClick(user.id)}}>삭제</button></td>
+              
             </tr>
-
-
           })}
         </tbody>
       </table>

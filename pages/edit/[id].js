@@ -38,7 +38,16 @@ const EditComponent = () => {
         router.push('/')
       })
     }else{
-      axios.put(`/api/v1/employees/${router.query.id}`, user).then(res => {
+
+      const nameValues = [];
+      for( const key in user){
+        nameValues.push({
+          name: key,
+          value: user[key],
+        })
+      }
+
+      axios.put(`/api/v1/employees/${router.query.id}`, {nameValues}).then(res => {
         console.log(res);
         alert('수정 성공');
         router.push('/')
